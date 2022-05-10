@@ -13,16 +13,18 @@ export default function Routing() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<PrivateRoute isLoginUser={true}><Home /></PrivateRoute>} />
-                <Route path="/important" element={<PrivateRoute isLoginUser={true}><Important /></PrivateRoute>} />
-                <Route path="/completed" element={<PrivateRoute isLoginUser={true}><Completed /></PrivateRoute>} />
-                <Route path="/assigned_to_me" element={<PrivateRoute isLoginUser={true}><AssignedToMe /></PrivateRoute>} />
-                <Route path="/task" element={<PrivateRoute isLoginUser={true}><Task /></PrivateRoute>} />
+                <Route element={<PrivateRoute isLoginUser={false} />} >
+                    <Route path="/" element={<Home />} />
+                    <Route path="/important" element={<Important />} />
+                    <Route path="/completed" element={<Completed />} />
+                    <Route path="/assigned_to_me" element={<AssignedToMe />} />
+                    <Route path="/task" element={<Task />} />
+                </Route>
 
 
-                <Route path="/login" element={<PublicRoute isLoginUser={true}><Login /></PublicRoute>} />
+                <Route path="/login" element={<PublicRoute isLoginUser={false}><Login /></PublicRoute>} />
             </Routes>
         </BrowserRouter>
-        
+
     )
 }
