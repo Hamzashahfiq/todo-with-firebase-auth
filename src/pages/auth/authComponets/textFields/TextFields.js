@@ -7,12 +7,12 @@ export default function TextFields({label , type, value,change,name}) {
     <Box
       component="form"
       sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
+        '& > :not(style)': { m: 1, width: '30ch' },
       }}
       noValidate
       autoComplete="off"
     >
-      <TextField  onChange = {change} name= {name} type = {type} value= {value} label={label || 'User Name'} variant="outlined" required />
+      <TextField  onChange = {change} name= {name} type = {type} value= {value} label={label || 'User Email'} variant="outlined" required />
     </Box>
   );
 }

@@ -1,8 +1,4 @@
-* {
-    text-decoration: none; 
-    color: black
-    
-}
+
 .mainDiv {
     background: #00B4DB;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #0083B0, #00B4DB);  /* Chrome 10-25, Safari 5.1-6 */

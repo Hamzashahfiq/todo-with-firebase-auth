@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,9 +12,13 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { SideBarData } from '../../constant/SideBarData';
+import { useSelector } from 'react-redux';
+import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LogButton from '../logButton/LogButton';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
 
 
@@ -58,9 +62,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+// code for boostap tooltip
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.black,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+  },
+}));
+
 export default function Navbar() {
+  const [width, height] = useWindowSize()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [isMobileMenu, setIsMobileMenu] = useState(false)
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -81,6 +99,47 @@ export default function Navbar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  const handleMobileMenu = () => {
+    setIsMobileMenu(true)
+  };
+  const handleMobileMenucls = () => {
+    setIsMobileMenu(false)
+  };
+
+
+  //  for icon indexing
+  const tasks = useSelector((store) => store.InputDataReducer.tasks)
+  const [taskLength, setTaskLength] = useState(0)
+  const [importantLength, setImportantLength] = useState(0)
+  const [completedLength, setCompletedLength] = useState(0)
+
+  // Use effect for index
+  useEffect(() => {
+    let task = tasks.filter((item) => {
+      return item.completed === false
+    })
+
+    setTaskLength(task.length)
+
+    let importantTask = tasks.filter((item) => {
+      return item.important === true && item.completed === false
+    })
+
+    setImportantLength(importantTask.length)
+
+    let completedTask = tasks.filter((item) => {
+      return item.completed === true
+    })
+
+    setCompletedLength(completedTask.length)
+
+
+  })
+  useEffect(() => {
+    if (width > 900) {
+      handleMobileMenucls();
+    }
+  })
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -98,6 +157,7 @@ export default function Navbar() {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      sx={{ zIndex: '1800' }}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
@@ -118,28 +178,65 @@ export default function Navbar() {
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      open={isMobileMenu}
+      onClose={handleMobileMenucls}
+      sx={{ zIndex: '1800' }}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
+        <IconButton size="large" aria-label="All Tasks" color="inherit">
+          <Badge badgeContent={tasks.length} color="error">
+            {SideBarData.map((item) => {
+              return (
+                item.name === 'All Tasks' && item.icon
+              )
+            })}
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>All Tasks</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" aria-label="Tasks" color="inherit">
+          <Badge badgeContent={taskLength} color="error">
+            {SideBarData.map((item) => {
+              return (
+                item.name === 'Task' && item.icon
+              )
+            })}
+          </Badge>
+        </IconButton>
+        <p>Task</p>
       </MenuItem>
       <MenuItem>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label="Completed"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+          <Badge badgeContent={completedLength} color="error">
+            {SideBarData.map((item) => {
+              return (
+                item.name === 'Completed' && item.icon
+              )
+            })}
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p>Completed</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="Important"
+          color="inherit"
+        >
+          <Badge badgeContent={importantLength} color="error">
+            {SideBarData.map((item) => {
+              return (
+                item.name === 'Important' && item.icon
+              )
+            })}
+          </Badge>
+        </IconButton>
+        <p>Important</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -157,8 +254,8 @@ export default function Navbar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1}}>
-      <AppBar position='fixed' style={{zIndex:'1500'}}>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position='fixed' style={{ zIndex: '1500' }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -179,7 +276,7 @@ export default function Navbar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Search sx={{ minWidth: '40%',backgroundColor:'rgb(244 246 255 / 60%)' }}>
+            <Search sx={{ minWidth: '40%', backgroundColor: 'rgb(244 246 255 / 60%)' }}>
               <SearchIconWrapper >
                 <SearchIcon color="secondary" />
               </SearchIconWrapper>
@@ -190,31 +287,62 @@ export default function Navbar() {
             </Search>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
+          <BootstrapTooltip title="All Tasks"><IconButton size="large" aria-label="All Tasks" color="inherit">
+              <Badge badgeContent={tasks.length} color="error">
+                {SideBarData.map((item) => {
+                  return (
+                    item.name === 'All Tasks' && item.icon
+                  )
+                })}
               </Badge>
-            </IconButton>
-            <IconButton
+            </IconButton></BootstrapTooltip>
+            <BootstrapTooltip title="Tasks"><IconButton size="large" aria-label="tasks" color="inherit">
+              <Badge badgeContent={taskLength} color="error">
+                {SideBarData.map((item) => {
+                  return (
+                    item.name === 'Task' && item.icon
+                  )
+                })}
+              </Badge>
+            </IconButton></BootstrapTooltip>
+            <BootstrapTooltip title="Completed"><IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="Completed"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+              <Badge badgeContent={completedLength} color="error">
+                {SideBarData.map((item) => {
+                  return (
+                    item.name === 'Completed' && item.icon
+                  )
+                })}
               </Badge>
-            </IconButton>
-            <IconButton
+            </IconButton></BootstrapTooltip>
+            <BootstrapTooltip title="Important"><IconButton
               size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              aria-label="Important"
               color="inherit"
             >
-              <AccountCircle />
-            </IconButton>
+              <Badge badgeContent={importantLength} color="error">
+                {SideBarData.map((item) => {
+                  return (
+                    item.name === 'Important' && item.icon
+                  )
+                })}
+              </Badge>
+            </IconButton></BootstrapTooltip>
+            {/* <IconButton
+              // size="medium"
+              // aria-label="account of current user"
+              // aria-controls={menuId}
+              // aria-haspopup="true"
+              // onClick={handleProfileMenuOpen}
+              // color="inherit"
+            >
+              <LockOutlinedIcon /> <Box component="span">Log Out</Box>
+            </IconButton> */}
+            <LogButton customStyle={{ textTransform: 'capitalize', ml: 2 }} buttonIcon={<LockOutlinedIcon />} lable='Logout' />
+
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -222,7 +350,7 @@ export default function Navbar() {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={handleMobileMenu}
               color="inherit"
             >
               <MoreIcon />

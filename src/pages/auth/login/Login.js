@@ -6,15 +6,15 @@ import BasicButton from '../authComponets/basicButton/BasicButton'
 import UseLogin from './UseLogin'
 
 export default function Login() {
-  const {userData, setValue} = UseLogin()
+  const {userData, setValue, loginHandler,loginLoading} = UseLogin()
   return (
         <div className='mainDiv'>
            <div className='singinDiv'>
               <Box component = 'h3' sx={{mb:2}}> Login</Box>
-               <TextFields value = {userData.userName} change ={(e) => setValue(e)} name = "userName" />
-               <TextFields value = {userData.password} change ={(e) => setValue(e)} name = "password" label = {'password'} type = {'password'}/> 
+               <TextFields value = {userData.userEmail} change ={(e) => setValue(e)} name = "userEmail" type = {'email'} />
+               <TextFields value = {userData.password} change ={(e) => setValue(e)} name = "password" label = {'Password'} type = {'password'}/> 
                <Box sx = {{textAlign: 'center' }}>
-               <BasicButton customStyle = {{margin:'20px'}} />
+               <BasicButton customStyle = {{margin:'20px'}} onPress = {loginHandler} loginLoading = {loginLoading} />
                </Box>
            </div>
         </div>

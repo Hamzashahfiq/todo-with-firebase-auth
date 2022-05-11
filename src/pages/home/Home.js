@@ -34,7 +34,7 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   zIndex: 300,
-  paddingTop: '60px',
+  paddingTop: '50px',
 };
 
 export default function Home() {
@@ -137,7 +137,7 @@ export default function Home() {
                   </IconButton>
                 </Box>}
               <Box component='span' sx={{ paddingTop: '11px', pl: 1, typography: 'h5', display: 'inline-block' }} >
-                My Day
+                All Tasks
                 <Box component="p" sx={{ typography: 'caption', ml: 1, color: '#797775' }}>
                   {dayName}, {monthName} {currentDate}
                 </Box>

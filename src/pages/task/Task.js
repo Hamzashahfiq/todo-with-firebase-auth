@@ -34,7 +34,7 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   zIndex: 300,
-  paddingTop: '60px',
+  paddingTop: '50px',
 };
 
 let TaskFlage = true;

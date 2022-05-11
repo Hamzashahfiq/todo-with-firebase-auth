@@ -1,4 +1,4 @@
-import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import GradeOutlinedIcon from '@mui/icons-material/GradeOutlined';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
@@ -8,7 +8,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 export const SideBarData = [
     {
         name: 'All Tasks',
-        icon: <LightModeOutlinedIcon />,
+        icon: <HomeOutlinedIcon />,
         link: '/',
     },
     {
@@ -28,7 +28,7 @@ export const SideBarData = [
     // },
     {
         name: 'Task',
-        icon: <HomeOutlinedIcon/>,
+        icon: <TaskOutlinedIcon />,
         link: '/task',
     },
 ]
