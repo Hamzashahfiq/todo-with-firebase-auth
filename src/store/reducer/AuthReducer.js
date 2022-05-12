@@ -12,6 +12,14 @@ export default function AuthReducer(state = initialState, action) {
                 user: action.payload
             }
         }
+        case "LOGOUT": {
+            console('reduce logout')
+            return {
+                ...state,
+                isLoginUser: false,
+                user: {}
+            }
+        }
 
         default:
             return state;

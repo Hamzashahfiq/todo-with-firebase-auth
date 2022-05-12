@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function TextFields({label , type, value,change,name}) {
+export default function TextFields({label , type, value,change,name,keyPress}) {
   return (
     <Box
       component="form"

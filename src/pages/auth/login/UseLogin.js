@@ -26,11 +26,18 @@ export default function UseLogin() {
      dispatch(Login(userData,setLoginLoading))
   }
 
+  const checkButton = (e) => {
+    console.log('e' + e)
+    if (e.key === "Enter") {
+      loginHandler()
+    }
+}
+
   return {
     userData,
     setValue,
     loginHandler,
     loginLoading,
-
+    checkButton,
   }
 }

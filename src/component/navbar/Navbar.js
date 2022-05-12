@@ -11,14 +11,16 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Link, NavLink } from "react-router-dom";
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { SideBarData } from '../../constant/SideBarData';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LogButton from '../logButton/LogButton';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import {Logout} from '../../store/action/AuthAction'
+import CircularLoading from '../circularLoading/CircularLoading';
 
 
 
@@ -79,6 +81,13 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isMobileMenu, setIsMobileMenu] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch();
+   
+    const doLogout = () => {
+      console.log('abc')
+      dispatch(Logout(setIsLoading))
+    } 
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -141,28 +150,28 @@ export default function Navbar() {
     }
   })
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-      sx={{ zIndex: '1800' }}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
+  // const menuId = 'primary-search-account-menu';
+  // const renderMenu = (
+  //   <Menu
+  //     // anchorEl={anchorEl}
+  //     anchorOrigin={{
+  //       vertical: 'top',
+  //       horizontal: 'right',
+  //     }}
+  //     id={menuId}
+  //     keepMounted
+  //     transformOrigin={{
+  //       vertical: 'top',
+  //       horizontal: 'right',
+  //     }}
+  //     open={false}
+  //     onClose={handleMobileMenucls}
+  //     sx={{ zIndex: '1800' }}
+  //   >
+  //     {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+  //     <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
+  //   </Menu>
+  // );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -182,63 +191,70 @@ export default function Navbar() {
       onClose={handleMobileMenucls}
       sx={{ zIndex: '1800' }}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="All Tasks" color="inherit">
-          <Badge badgeContent={tasks.length} color="error">
-            {SideBarData.map((item) => {
-              return (
-                item.name === 'All Tasks' && item.icon
-              )
-            })}
-          </Badge>
-        </IconButton>
-        <p>All Tasks</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="Tasks" color="inherit">
-          <Badge badgeContent={taskLength} color="error">
-            {SideBarData.map((item) => {
-              return (
-                item.name === 'Task' && item.icon
-              )
-            })}
-          </Badge>
-        </IconButton>
-        <p>Task</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="Completed"
-          color="inherit"
-        >
-          <Badge badgeContent={completedLength} color="error">
-            {SideBarData.map((item) => {
-              return (
-                item.name === 'Completed' && item.icon
-              )
-            })}
-          </Badge>
-        </IconButton>
-        <p>Completed</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="Important"
-          color="inherit"
-        >
-          <Badge badgeContent={importantLength} color="error">
-            {SideBarData.map((item) => {
-              return (
-                item.name === 'Important' && item.icon
-              )
-            })}
-          </Badge>
-        </IconButton>
-        <p>Important</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+
+      {SideBarData.map((item, index) => {
+        return (
+          item.name === 'All Tasks' &&
+          <Link to={item.link} key={index} style={{ color: 'black', textDecoration: 'none' }} >
+            <MenuItem>
+              <IconButton size="large" aria-label="All Tasks" color="inherit">
+                <Badge key={index} badgeContent={tasks.length} color="error">
+                  {item.icon}
+                </Badge>  </IconButton>
+              <p>All Tasks</p>
+            </MenuItem></Link>)
+      })}
+
+      {SideBarData.map((item, index) => {
+        return (
+          item.name === 'Task' &&
+          <Link to={item.link} key={index} style={{ color: 'black', textDecoration: 'none' }} ><MenuItem>
+            <IconButton size="large" aria-label="Tasks" color="inherit">
+              <Badge key={index} badgeContent={taskLength} color="error">
+                {item.icon}</Badge></IconButton>
+            <p>Task</p>
+          </MenuItem></Link>
+        )
+      })}
+
+      {SideBarData.map((item, index) => {
+        return (
+          item.name === 'Completed' &&
+          <Link to={item.link} key={index} style={{ color: 'black', textDecoration: 'none' }} ><MenuItem>
+            <IconButton
+              size="large"
+              aria-label="Completed"
+              color="inherit"
+            >
+              <Badge key={index} badgeContent={completedLength} color="error">
+                {item.icon}
+              </Badge> </IconButton>
+            <p>Completed</p>
+          </MenuItem></Link>
+        )
+      })}
+
+
+      {SideBarData.map((item, index) => {
+        return (
+          item.name === 'Important' &&
+          <Link to={item.link} key={index} style={{ color: 'black', textDecoration: 'none' }} ><MenuItem>
+            <IconButton
+              size="large"
+              aria-label="Important"
+              color="inherit"
+            >
+              <Badge key={index} badgeContent={importantLength} color="error">
+                {item.icon}
+              </Badge> </IconButton>
+            <p>Important</p>
+          </MenuItem></Link>
+        )
+      })}
+
+
+      {/* onClick={()=> #} for lougout */}
+      <MenuItem onClick={isLoading ? null : doLogout} >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -246,14 +262,15 @@ export default function Navbar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+        {isLoading?<CircularLoading />  :<LockOutlinedIcon />}
         </IconButton>
-        <p>Profile</p>
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   );
 
   return (
+    
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='fixed' style={{ zIndex: '1500' }}>
         <Toolbar>
@@ -272,7 +289,8 @@ export default function Navbar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            To Do
+            To Do 
+            <button onClick={doLogout}>abncb</button>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -287,50 +305,60 @@ export default function Navbar() {
             </Search>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <BootstrapTooltip title="All Tasks"><IconButton size="large" aria-label="All Tasks" color="inherit">
-              <Badge badgeContent={tasks.length} color="error">
-                {SideBarData.map((item) => {
-                  return (
-                    item.name === 'All Tasks' && item.icon
-                  )
-                })}
-              </Badge>
-            </IconButton></BootstrapTooltip>
-            <BootstrapTooltip title="Tasks"><IconButton size="large" aria-label="tasks" color="inherit">
-              <Badge badgeContent={taskLength} color="error">
-                {SideBarData.map((item) => {
-                  return (
-                    item.name === 'Task' && item.icon
-                  )
-                })}
-              </Badge>
-            </IconButton></BootstrapTooltip>
-            <BootstrapTooltip title="Completed"><IconButton
-              size="large"
-              aria-label="Completed"
-              color="inherit"
-            >
-              <Badge badgeContent={completedLength} color="error">
-                {SideBarData.map((item) => {
-                  return (
-                    item.name === 'Completed' && item.icon
-                  )
-                })}
-              </Badge>
-            </IconButton></BootstrapTooltip>
-            <BootstrapTooltip title="Important"><IconButton
-              size="large"
-              aria-label="Important"
-              color="inherit"
-            >
-              <Badge badgeContent={importantLength} color="error">
-                {SideBarData.map((item) => {
-                  return (
-                    item.name === 'Important' && item.icon
-                  )
-                })}
-              </Badge>
-            </IconButton></BootstrapTooltip>
+
+            {SideBarData.map((item, index) => {
+              return (
+                item.name === 'All Tasks' &&
+                <Link to={item.link} key={index} style={{ color: 'white' }} ><BootstrapTooltip title="All Tasks"><IconButton size="large" aria-label="All Tasks" color="inherit">
+                  <Badge badgeContent={tasks.length} color="error">
+                    {item.icon}
+                  </Badge>
+                </IconButton></BootstrapTooltip></Link>)
+            })}
+
+
+
+            {SideBarData.map((item, index) => {
+              return (
+                item.name === 'Task' &&
+                <Link to={item.link} key={index} style={{ color: 'white' }}><BootstrapTooltip title="Tasks"><IconButton size="large" aria-label="tasks" color="inherit">
+                  <Badge badgeContent={taskLength} color="error">
+                    {item.icon}
+                  </Badge>
+                </IconButton></BootstrapTooltip></Link>)
+            })}
+
+
+            {SideBarData.map((item, index) => {
+              return (
+                item.name === 'Completed' &&
+                <Link to={item.link} key={index} style={{ color: 'white' }} ><BootstrapTooltip title="Completed"><IconButton
+                  size="large"
+                  aria-label="Completed"
+                  color="inherit"
+                >
+                  <Badge key={index} badgeContent={completedLength} color="error">
+                    {item.icon}
+                  </Badge>
+                </IconButton></BootstrapTooltip></Link>)
+            })}
+
+
+            {SideBarData.map((item, index) => {
+              return (
+                item.name === 'Important' &&
+                <Link to={item.link} key={index} style={{ color: 'white' }} ><BootstrapTooltip title="Important"><IconButton
+                  size="large"
+                  aria-label="Important"
+                  color="inherit"
+                >
+                  <Badge key={index} badgeContent={importantLength} color="error">
+                    {item.icon}
+                  </Badge>
+                </IconButton></BootstrapTooltip></Link>)
+            })}
+
+
             {/* <IconButton
               // size="medium"
               // aria-label="account of current user"
@@ -341,7 +369,7 @@ export default function Navbar() {
             >
               <LockOutlinedIcon /> <Box component="span">Log Out</Box>
             </IconButton> */}
-            <LogButton customStyle={{ textTransform: 'capitalize', ml: 2 }} buttonIcon={<LockOutlinedIcon />} lable='Logout' />
+            <LogButton isLoading= {isLoading} customStyle={{ textTransform: 'capitalize', ml: 2 }} onPress={doLogout} buttonIcon={<LockOutlinedIcon />} lable='Logout' />
 
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -359,7 +387,7 @@ export default function Navbar() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMenu} */}
     </Box>
   );
 }
