@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import {GetCurrentUser} from './store/action/AuthAction'
+import LinearLoading from './component/linearLoading/LinearLoading'
+
 
 
 
@@ -18,8 +20,7 @@ function App() {
   }, []);
   return (
     <>
-     
-     {loader ? <div>Fetching User ......</div> : <Routing />}
+     {loader ? <LinearLoading /> : <Routing />}
      <ToastContainer />
     
     </>

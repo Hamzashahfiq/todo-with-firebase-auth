@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import {Login} from '../../../store/action/AuthAction'
+import {doLogin} from '../../../store/action/AuthAction'
 
 
 let userDetail = {
@@ -23,21 +23,15 @@ export default function UseLogin() {
       toast.error("First enter correct email and password")
       return
     }
-     dispatch(Login(userData,setLoginLoading))
+     dispatch(doLogin(userData,setLoginLoading))
   }
 
-  const checkButton = (e) => {
-    console.log('e' + e)
-    if (e.key === "Enter") {
-      loginHandler()
-    }
-}
+  
 
   return {
     userData,
     setValue,
     loginHandler,
     loginLoading,
-    checkButton,
   }
 }

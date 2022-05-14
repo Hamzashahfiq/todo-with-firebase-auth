@@ -9,6 +9,7 @@ import Login from '../pages/auth/login/Login'
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import { useSelector } from 'react-redux';
+import Signup from '../pages/auth/signup/Signup';
 
 export default function Routing() {
     const isLoginUser = useSelector((store) => store.AuthReducer.isLoginUser)
@@ -25,6 +26,7 @@ export default function Routing() {
 
 
                 <Route path="/login" element={<PublicRoute isLoginUser={isLoginUser}><Login /></PublicRoute>} />
+                <Route path="/signup" element={<PublicRoute isLoginUser={isLoginUser}><Signup /></PublicRoute>} />
             </Routes>
         </BrowserRouter>
 

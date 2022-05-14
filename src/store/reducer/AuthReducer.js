@@ -1,10 +1,18 @@
 const initialState = {
     isLoginUser: false,
-    user: {}
+    user: null
 }
 
 export default function AuthReducer(state = initialState, action) {
     switch (action.type) {
+        case "LOGOUT": {
+            return {
+                ...state,
+                isLoginUser: false,
+                user: null
+            }
+        }
+
         case "LOGIN": {
             return {
                 ...state,
@@ -12,14 +20,7 @@ export default function AuthReducer(state = initialState, action) {
                 user: action.payload
             }
         }
-        case "LOGOUT": {
-            console('reduce logout')
-            return {
-                ...state,
-                isLoginUser: false,
-                user: {}
-            }
-        }
+      
 
         default:
             return state;

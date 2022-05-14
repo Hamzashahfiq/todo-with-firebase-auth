@@ -19,7 +19,7 @@ import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/wind
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LogButton from '../logButton/LogButton';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import {Logout} from '../../store/action/AuthAction'
+import {doLogout} from '../../store/action/AuthAction'
 import CircularLoading from '../circularLoading/CircularLoading';
 
 
@@ -84,9 +84,9 @@ export default function Navbar() {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch();
    
-    const doLogout = () => {
+    const doLogoutHandler = () => {
       console.log('abc')
-      dispatch(Logout(setIsLoading))
+      dispatch(doLogout(setIsLoading))
     } 
 
   const isMenuOpen = Boolean(anchorEl);
@@ -254,7 +254,7 @@ export default function Navbar() {
 
 
       {/* onClick={()=> #} for lougout */}
-      <MenuItem onClick={isLoading ? null : doLogout} >
+      <MenuItem onClick={isLoading ? null : doLogoutHandler} >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -290,7 +290,6 @@ export default function Navbar() {
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
             To Do 
-            <button onClick={doLogout}>abncb</button>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -369,7 +368,7 @@ export default function Navbar() {
             >
               <LockOutlinedIcon /> <Box component="span">Log Out</Box>
             </IconButton> */}
-            <LogButton isLoading= {isLoading} customStyle={{ textTransform: 'capitalize', ml: 2 }} onPress={doLogout} buttonIcon={<LockOutlinedIcon />} lable='Logout' />
+            <LogButton isLoading= {isLoading} customStyle={{ textTransform: 'capitalize', ml: 2 }} onPress={doLogoutHandler} buttonIcon={<LockOutlinedIcon />} lable='Logout' />
 
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
